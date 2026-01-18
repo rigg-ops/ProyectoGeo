@@ -128,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Error: severidadData not found.");
     }
 
-    // Practice 8: Contenedores (Urban scale)
-    const mapP8 = initMap('map-p8', madridCoords, 13);
+    // Practice 8: Maps handled via iframe in HTML explicitly due to complex/large external file formats.
+    // (See index.html for implementation)
 
     // Practice 9: SAVI & EVI
     const mapP9 = initMap('map-p9', valenciaCoords, 11);
@@ -166,6 +166,58 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
+
+    // --- Hamburger Menu Logic ---
+    const menuToggle = document.getElementById('menu-toggle');
+    const sideDrawer = document.getElementById('side-drawer');
+
+    if (menuToggle && sideDrawer) {
+        const menuLinks = sideDrawer.querySelectorAll('a');
+
+        function toggleMenu() {
+            const isOpen = sideDrawer.classList.contains('open');
+            if (isOpen) {
+                sideDrawer.classList.remove('open');
+                menuToggle.classList.remove('menu-open'); // Remove class
+                menuToggle.innerHTML = "☰"; // Reset to hamburger
+                menuToggle.setAttribute('aria-label', 'Abrir menú');
+            } else {
+                sideDrawer.classList.add('open');
+                menuToggle.classList.add('menu-open'); // Add class
+                menuToggle.innerHTML = "&times;"; // Change to X
+                menuToggle.setAttribute('aria-label', 'Cerrar menú');
+            }
+        }
+
+        function closeMenu() {
+            sideDrawer.classList.remove('open');
+            menuToggle.classList.remove('menu-open'); // Remove class
+            menuToggle.innerHTML = "☰";
+            menuToggle.setAttribute('aria-label', 'Abrir menú');
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // Close menu when a link is clicked
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Remove active class from all
+                menuLinks.forEach(l => l.classList.remove('active'));
+                // Add to clicked
+                this.classList.add('active');
+                closeMenu();
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (sideDrawer.classList.contains('open') &&
+                !sideDrawer.contains(e.target) &&
+                !menuToggle.contains(e.target)) {
+                closeMenu();
+            }
+        });
     }
 
 });
