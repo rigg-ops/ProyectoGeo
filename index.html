@@ -23,6 +23,26 @@
 
 <body>
 
+    <!-- Hamburger Menu Button -->
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
+
+    <!-- Side Drawer Navigation -->
+    <nav id="side-drawer" class="side-drawer">
+        <!-- Close button removed, handled by toggle -->
+        <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#practica1">Práctica 1</a></li>
+            <li><a href="#practica3">Práctica 3</a></li>
+            <li><a href="#practica4">Práctica 4</a></li>
+            <li><a href="#practica5">Práctica 5</a></li>
+            <li><a href="#practica7">Práctica 7</a></li>
+            <li><a href="#practica8">Práctica 8</a></li>
+            <li><a href="#practica9">Práctica 9</a></li>
+            <li><a href="#practica10">Práctica 10</a></li>
+            <li><a href="#equipo">Nuestro Equipo</a></li>
+        </ul>
+    </nav>
+
     <!-- Hero Section -->
     <header class="hero">
         <h4>PROYECTO ASIGNATURA</h4>
@@ -36,12 +56,12 @@
     <main id="portfolio" class="container">
 
         <!-- Práctica 1 -->
-        <section>
+        <section id="practica1">
             <h2>Práctica 1: Básicos</h2>
             <div class="grid">
                 <article class="card">
                     <div class="card-header">
-                        <span class="card-tag">Evidencia</span>
+                        <span class="card-tag">Imagen</span>
                         <h3>Captura de Pantalla</h3>
                         <p>Visualización del entorno de trabajo inicial.</p>
                     </div>
@@ -54,7 +74,7 @@
         </section>
 
         <!-- Práctica 3 -->
-        <section>
+        <section id="practica3">
             <h2>Práctica 3: Cartografía Climática</h2>
             <div class="grid">
                 <!-- Precipitaciones -->
@@ -86,7 +106,7 @@
         </section>
 
         <!-- Práctica 4 -->
-        <section>
+        <section id="practica4">
             <h2>Práctica 4: Zonas Válidas</h2>
             <div class="grid">
                 <article class="card" style="grid-column: 1 / -1;">
@@ -101,7 +121,7 @@
         </section>
 
         <!-- Práctica 5 -->
-        <section>
+        <section id="practica5">
             <h2>Práctica 5: Severidad de Incendios</h2>
             <div class="grid">
                 <article class="card" style="grid-column: 1 / -1;">
@@ -116,7 +136,7 @@
         </section>
 
         <!-- Práctica 7 -->
-        <section>
+        <section id="practica7">
             <h2>Práctica 7: Resultados y Rendimiento</h2>
             <div class="grid">
                 <article class="card">
@@ -134,22 +154,39 @@
         </section>
 
         <!-- Práctica 8 -->
-        <section>
+        <section id="practica8">
             <h2>Práctica 8: Equipamiento Urbano</h2>
             <div class="grid">
+                <!-- Accidents Map -->
                 <article class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
-                        <span class="card-tag">WebMap</span>
-                        <h3>Contenedores y Accidentes</h3>
-                        <p>Distribución de contenedores y puntos de accidentes en Madrid.</p>
+                        <span class="card-tag">WebMap Interactivo</span>
+                        <h3>Accidentes en Madrid</h3>
+                        <p>Mapa de calor temporal de accidentes.</p>
                     </div>
-                    <div id="map-p8" class="placeholder-container map-container"></div>
+                    <div class="map-container" style="height: 600px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/P8/Accidentes_Madrid_Aguilar_Fores_Y_Espinoza_Cervera.html"
+                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                    </div>
+                </article>
+
+                <!-- Containers Map -->
+                <article class="card" style="grid-column: 1 / -1; margin-top: 2rem;">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap Interactivo</span>
+                        <h3>Contenedores</h3>
+                        <p>Agrupación (Clustering) de contenedores.</p>
+                    </div>
+                    <div class="map-container" style="height: 600px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/P8/Contenedores_Aguilar_Fores_Y_Espinoza_Cervera.html"
+                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                    </div>
                 </article>
             </div>
         </section>
 
         <!-- Práctica 9 -->
-        <section>
+        <section id="practica9">
             <h2>Práctica 9: Índices de Vegetación</h2>
             <div class="grid">
                 <article class="card" style="grid-column: 1 / -1;">
@@ -164,7 +201,7 @@
         </section>
 
         <!-- Práctica 10 -->
-        <section>
+        <section id="practica10">
             <h2>Práctica 10: Evolución Temporal</h2>
             <div class="grid">
                 <article class="card">
@@ -191,13 +228,11 @@
         </section>
 
         <!-- Equipo -->
-        <section>
+        <section id="equipo">
             <h2>Nuestro Equipo</h2>
             <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                 <article class="card" style="text-align: center;">
-                    <div
-                        style="width: 80px; height: 80px; background: #dce3dd; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                        👩‍💻</div>
+
                     <h3>Judit Espinoza Cervera</h3>
                     <p style="margin-bottom: 0.5rem; color: var(--primary-accent); font-weight: 600;">Estudiante de 3º
                     </p>
@@ -205,9 +240,7 @@
                 </article>
 
                 <article class="card" style="text-align: center;">
-                    <div
-                        style="width: 80px; height: 80px; background: #e8dbd3; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                        👩‍💻</div>
+
                     <h3>Nerea Aguilar Forés</h3>
                     <p style="margin-bottom: 0.5rem; color: var(--primary-accent); font-weight: 600;">Estudiante de 3º
                     </p>
