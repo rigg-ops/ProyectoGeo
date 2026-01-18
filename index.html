@@ -57,18 +57,30 @@
         <section>
             <h2>Práctica 3: Cartografía Climática</h2>
             <div class="grid">
+                <!-- Precipitaciones -->
                 <article class="card">
                     <div class="card-header">
-                        <span class="card-tag">PDF</span>
-                        <h3>Temperaturas y Precipitaciones</h3>
-                        <p>Mapa temático de variables climáticas.</p>
+                        <span class="card-tag">Mapa Estático</span>
+                        <h3>Precipitaciones</h3>
+                        <p>Total anual de precipitaciones en la península.</p>
                     </div>
-                    <a href="#" class="pdf-btn" target="_blank">
-                        📄 Ver Mapa PDF
-                    </a>
-                    <p style="margin-top:1rem; font-size:0.8rem; text-align:center; opacity:0.6;">
-                        (Vincula tu PDF aquí en el href)
-                    </p>
+                    <div class="media-box" style="border:none; background:transparent;">
+                        <img src="assets/practica3_precip.jpg" alt="Mapa Precipitaciones"
+                            style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    </div>
+                </article>
+
+                <!-- Temperaturas -->
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">Mapa Estático</span>
+                        <h3>Temperaturas</h3>
+                        <p>Mapa de temperatura media de Junio 2024.</p>
+                    </div>
+                    <div class="media-box" style="border:none; background:transparent;">
+                        <img src="assets/practica3_temp.jpg" alt="Mapa Temperaturas"
+                            style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    </div>
                 </article>
             </div>
         </section>
@@ -220,6 +232,18 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- shpjs (Optional now, but keeping just in case) -->
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.js"></script>
+
+    <!-- Georaster (For rendering TIFs) -->
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+
+    <!-- Data Files (Local GeoJSON/Base64 to avoid CORS) -->
+    <script src="assets/zonas_validas_data.js"></script>
+    <script src="assets/severidad_data.js"></script>
+
     <!-- Main Script -->
     <script src="script.js"></script>
 </body>
