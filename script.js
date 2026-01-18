@@ -27,11 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const map = L.map(elementId).setView(center, zoom);
 
-        // Light Clean Basemap (CartoDB Voyager) for Earth/Plant theme
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20
+        // Standard OpenStreetMap (More details: roads, topography, labels - "With things")
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
         }).addTo(map);
 
         // --- INSTRUCTION FOR STUDENT ---
@@ -56,11 +55,78 @@ document.addEventListener('DOMContentLoaded', () => {
     const madridCoords = [40.4168, -3.7038];
     const valenciaCoords = [39.4699, -0.3763];
 
-    // Practice 4: Zonas Validas
+    // Practice 4: Zonas Validas (Loading Shapefile)
     const mapP4 = initMap('map-p4', valenciaCoords, 10);
 
-    // Practice 5: Severidad (Fire severity often covers larger areas)
-    const mapP5 = initMap('map-p5', valenciaCoords, 9);
+    // Practice 4: Zonas Validas (Loading Local Data)
+    // const mapP4 = initMap('map-p4', valenciaCoords, 10); // Removed duplicate call
+
+    // Check if data loaded correctly from the script tag
+    if (typeof zonasValidasData !== 'undefined') {
+        const p4Layer = L.geoJSON(zonasValidasData, {
+            style: function (feature) {
+                return {
+                    color: '#ff7800',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.2
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties) {
+                    let popupContent = "<b>Información:</b><br>";
+                    for (const [key, value] of Object.entries(feature.properties)) {
+                        popupContent += `${key}: ${value}<br>`;
+                    }
+                    layer.bindPopup(popupContent);
+                }
+            }
+        }).addTo(mapP4);
+
+        // Auto-center map to the loaded data
+        try {
+            const bounds = p4Layer.getBounds();
+            if (bounds.isValid()) {
+                mapP4.fitBounds(bounds);
+            }
+        } catch (e) {
+            console.log("Could not auto-center map P4", e);
+        }
+
+    } else {
+        console.error("Error: zonasValidasData not found. Make sure assets/zonas_validas_data.js is loaded.");
+    }
+
+    // Practice 5: Severidad (Fire severity)
+    const mapP5 = initMap('map-p5', valenciaCoords, 10); // Standard zoom
+
+    if (typeof severidadData !== 'undefined') {
+        // 1. Convert Base64 to ArrayBuffer
+        const binaryString = window.atob(severidadData);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        const arrayBuffer = bytes.buffer;
+
+        // 2. Parse GeoTIFF
+        parseGeoraster(arrayBuffer).then(georaster => {
+            // 3. Create Layer
+            const layer = new GeoRasterLayer({
+                georaster: georaster,
+                opacity: 0.7,
+                resolution: 256 // Higher value = sharper image (default was too low)
+            });
+            layer.addTo(mapP5);
+
+            // 4. Fit bounds
+            mapP5.fitBounds(layer.getBounds());
+
+        }).catch(e => console.error("Error parsing TIF P5:", e));
+    } else {
+        console.error("Error: severidadData not found.");
+    }
 
     // Practice 8: Contenedores (Urban scale)
     const mapP8 = initMap('map-p8', madridCoords, 13);
