@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio WebMap | TIG</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h4>PROYECTO ASIGNATURA</h4>
+        <h1>PORTAFOLIO <span class="highlight">WEBMAP</span></h1>
+        <p>Recopilación de prácticas y resultados de Tecnologías de la Información Geográfica. Análisis espacial,
+            cartografía digital y visualización de datos.</p>
+        <a href="#portfolio" class="hero-btn">Explorar Prácticas</a>
+    </header>
+
+    <!-- Main Content -->
+    <main id="portfolio" class="container">
+
+        <!-- Práctica 1 -->
+        <section>
+            <h2>Práctica 1: Básicos</h2>
+            <div class="grid">
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">Evidencia</span>
+                        <h3>Captura de Pantalla</h3>
+                        <p>Visualización del entorno de trabajo inicial.</p>
+                    </div>
+                    <div class="placeholder-container media-box" id="p1-img">
+                        <span>IMAGEN AQUÍ (PNG/JPG)</span>
+                        <small>assets/practica1.png</small>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 3 -->
+        <section>
+            <h2>Práctica 3: Cartografía Climática</h2>
+            <div class="grid">
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">PDF</span>
+                        <h3>Temperaturas y Precipitaciones</h3>
+                        <p>Mapa temático de variables climáticas.</p>
+                    </div>
+                    <a href="#" class="pdf-btn" target="_blank">
+                        📄 Ver Mapa PDF
+                    </a>
+                    <p style="margin-top:1rem; font-size:0.8rem; text-align:center; opacity:0.6;">
+                        (Vincula tu PDF aquí en el href)
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 4 -->
+        <section>
+            <h2>Práctica 4: Zonas Válidas</h2>
+            <div class="grid">
+                <article class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap</span>
+                        <h3>Visualización Vectorial</h3>
+                        <p>Visualización interactiva de zonas aptas mediante capas vectoriales (.shp).</p>
+                    </div>
+                    <div id="map-p4" class="placeholder-container map-container"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 5 -->
+        <section>
+            <h2>Práctica 5: Severidad de Incendios</h2>
+            <div class="grid">
+                <article class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap + Raster</span>
+                        <h3>Análisis de Severidad</h3>
+                        <p>Modelo digital de severidad de incendios basado en análisis raster (GeoTIFF).</p>
+                    </div>
+                    <div id="map-p5" class="placeholder-container map-container"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 7 -->
+        <section>
+            <h2>Práctica 7: Resultados y Rendimiento</h2>
+            <div class="grid">
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">Análisis</span>
+                        <h3>Tabla de Resultados</h3>
+                        <p>Comparativa de rendimiento y datos obtenidos.</p>
+                    </div>
+                    <div class="placeholder-container media-box" id="p7-img">
+                        <span>TABLA/GRÁFICO (JPG/HTML)</span>
+                        <small>assets/practica7.jpg</small>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 8 -->
+        <section>
+            <h2>Práctica 8: Equipamiento Urbano</h2>
+            <div class="grid">
+                <article class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap</span>
+                        <h3>Contenedores y Accidentes</h3>
+                        <p>Distribución de contenedores y puntos de accidentes en Madrid.</p>
+                    </div>
+                    <div id="map-p8" class="placeholder-container map-container"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 9 -->
+        <section>
+            <h2>Práctica 9: Índices de Vegetación</h2>
+            <div class="grid">
+                <article class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap</span>
+                        <h3>SAVI y EVI</h3>
+                        <p>Cálculo y visualización de índices de vegetación ajustados al suelo.</p>
+                    </div>
+                    <div id="map-p9" class="placeholder-container map-container"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Práctica 10 -->
+        <section>
+            <h2>Práctica 10: Evolución Temporal</h2>
+            <div class="grid">
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">WebMap</span>
+                        <h3>Índice Calculado</h3>
+                        <p>Visualización del índice final exportado.</p>
+                    </div>
+                    <div id="map-p10" class="placeholder-container map-container"></div>
+                </article>
+
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">Voluntario</span>
+                        <h3>Animación Temporal</h3>
+                        <p>Video/GIF de la evolución de los índices.</p>
+                    </div>
+                    <div class="placeholder-container media-box">
+                        <span>GIF ANIMADO</span>
+                        <small>assets/video.gif</small>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Equipo -->
+        <section>
+            <h2>Nuestro Equipo</h2>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <article class="card" style="text-align: center;">
+                    <div
+                        style="width: 80px; height: 80px; background: #dce3dd; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                        👩‍💻</div>
+                    <h3>Judit Espinoza Cervera</h3>
+                    <p style="margin-bottom: 0.5rem; color: var(--primary-accent); font-weight: 600;">Estudiante de 3º
+                    </p>
+                    <p style="font-size: 0.9rem;">Grado en Tecnologías Interactivas</p>
+                </article>
+
+                <article class="card" style="text-align: center;">
+                    <div
+                        style="width: 80px; height: 80px; background: #e8dbd3; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                        👩‍💻</div>
+                    <h3>Nerea Aguilar Forés</h3>
+                    <p style="margin-bottom: 0.5rem; color: var(--primary-accent); font-weight: 600;">Estudiante de 3º
+                    </p>
+                    <p style="font-size: 0.9rem;">Grado en Tecnologías Interactivas</p>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Proyecto TIG.</p>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Main Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
