@@ -45,9 +45,9 @@
                         <h3>Captura de Pantalla</h3>
                         <p>Visualización del entorno de trabajo inicial.</p>
                     </div>
-                    <div class="placeholder-container media-box" id="p1-img">
-                        <span>IMAGEN AQUÍ (PNG/JPG)</span>
-                        <small>assets/practica1.png</small>
+                    <div class="media-box" id="p1-img" style="border:none; background:transparent;">
+                        <img src="assets/practica1.jpg" alt="Captura Práctica 1"
+                            style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     </div>
                 </article>
             </div>
@@ -209,6 +209,13 @@
     <footer>
         <p>&copy; 2024 Proyecto TIG.</p>
     </footer>
+
+    <!-- Image Lightbox Modal -->
+    <div id="image-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="img-in-modal">
+        <div id="caption"></div>
+    </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
