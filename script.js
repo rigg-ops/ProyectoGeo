@@ -71,4 +71,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Practice 10: Indices
     const mapP10 = initMap('map-p10', valenciaCoords, 11);
 
+
+    // --- Image Lightbox Logic ---
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("img-in-modal");
+    const captionText = document.getElementById("caption");
+    const closeBtn = document.getElementsByClassName("close-modal")[0];
+
+    // Get all images that are insides 'media-box' (or you can select all images with 'img')
+    // We filter for images that have a source
+    const images = document.querySelectorAll('.media-box img');
+
+    images.forEach(img => {
+        img.addEventListener('click', function () {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            captionText.innerHTML = this.alt;
+        });
+    });
+
+    // Close logic
+    closeBtn.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // Close on click outside
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
 });
