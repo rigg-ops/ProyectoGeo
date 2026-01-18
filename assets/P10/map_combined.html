@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Mapa Combinado NDWI / MNDWI</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #e2e6ea;
+        }
+
+        .btn.active {
+            background: #4575b4;
+            color: white;
+            border-color: #2b558c;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading">Cargando datos...</div>
+    <div id="map"></div>
+    <div class="controls">
+        <h3>Indices de Agua</h3>
+        <button class="btn" onclick="switchLayer('NDWI')" id="btn-NDWI">NDWI</button>
+        <button class="btn" onclick="switchLayer('MNDWI')" id="btn-MNDWI">MNDWI</button>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Map
+        const map = L.map('map').setView([39.4699, -0.3763], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // State
+        let currentLayer = null;
+        let currentType = null;
+        const loadedScripts = {};
+
+        // Helper Functions from Original Maps
+        function decodeBase64(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function computeStats(georaster) {
+            let min = Infinity;
+            let max = -Infinity;
+            const values = georaster.values[0];
+            const noData = georaster.noDataValue;
+
+            for (let i = 0; i < values.length; i++) {
+                for (let j = 0; j < values[i].length; j++) {
+                    const val = values[i][j];
+                    if (val !== noData && !isNaN(val) && val !== -9999) {
+                        if (val < min) min = val;
+                        if (val > max) max = val;
+                    }
+                }
+            }
+            return { min, max };
+        }
+
+        // Color Scale
+        const waterColorFn = (val, min, max) => {
+            const norm = (val - min) / (max - min);
+            if (norm < 0.2) return '#d73027';
+            if (norm < 0.4) return '#fc8d59';
+            if (norm < 0.6) return '#fee08b';
+            if (norm < 0.8) return '#91bfdb';
+            return '#4575b4';
+        };
+
+        function createLayer(georaster, name) {
+            let min = georaster.mins[0];
+            let max = georaster.maxs[0];
+
+            if (min === undefined || max === undefined) {
+                const stats = computeStats(georaster);
+                min = stats.min;
+                max = stats.max;
+                georaster.mins[0] = min;
+                georaster.maxs[0] = max;
+            }
+
+            return new GeoRasterLayer({
+                georaster: georaster,
+                opacity: 0.8,
+                resolution: 256,
+                workers: false,
+                pixelValuesToColorFn: values => {
+                    const val = values[0];
+                    if (val === null || isNaN(val) || val === -9999) return null;
+                    return waterColorFn(val, min, max);
+                }
+            });
+        }
+
+        // Dynamic Loading
+        async function loadDataScript(type) {
+            if (loadedScripts[type]) return;
+
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                // Point to the new split files
+                script.src = `../p10_${type.toLowerCase()}.js`;
+                script.onload = () => {
+                    loadedScripts[type] = true;
+                    resolve();
+                };
+                script.onerror = () => reject(new Error(`Failed to load ${type} data`));
+                document.body.appendChild(script);
+            });
+        }
+
+        async function switchLayer(type) {
+            if (currentType === type) return; // Already active
+
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            // UI Updates
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${type}`).classList.add('active');
+
+            try {
+                // remove existing
+                if (currentLayer) {
+                    map.removeLayer(currentLayer);
+                    currentLayer = null;
+                }
+
+                // Load Data if needed
+                if (!loadedScripts[type]) {
+                    console.log(`Loading ${type} data...`);
+                    await loadDataScript(type);
+                }
+
+                // Get Data Variable
+                let dataBase64 = null;
+                if (type === 'NDWI' && typeof ndwiData !== 'undefined') dataBase64 = ndwiData;
+                if (type === 'MNDWI' && typeof mndwiData !== 'undefined') dataBase64 = mndwiData;
+
+                if (!dataBase64) throw new Error(`${type} data variable not found`);
+
+                // Parse
+                const georaster = await parseGeoraster(decodeBase64(dataBase64));
+                const layer = createLayer(georaster, type);
+
+                layer.addTo(map);
+                map.fitBounds(layer.getBounds());
+                currentLayer = layer;
+                currentType = type;
+
+            } catch (err) {
+                console.error(err);
+                alert(`Error: ${err.message}`);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Auto-load first one? Or wait for user?
+        // Let's wait for user to save initial memory, or load NDWI by default if they want immediate result.
+        // User asked to reduce memory, so explicit load is better. 
+        // But for UX, maybe load NDWI?
+        // Let's leave it empty and let them click, or just load NDWI.
+        // I will trigger NDWI click.
+        switchLayer('NDWI');
+
+    </script>
+</body>
+
+</html>

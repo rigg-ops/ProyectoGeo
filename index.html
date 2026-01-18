@@ -227,28 +227,16 @@
             <h2>Práctica 10: Evolución Temporal e Índices Finales</h2>
             <div class="grid">
                 <!-- NDWI / MNDWI Map -->
-                <!-- NDWI Map -->
-                <article class="card">
+                <!-- Combined NDWI / MNDWI Map -->
+                <article class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-tag">WebMap Avanzado</span>
-                        <h3>Índice NDWI</h3>
-                        <p>Normalized Difference Water Index. Detección de cuerpos de agua superficiales.</p>
+                        <h3>Análisis de Agua (NDWI / MNDWI)</h3>
+                        <p>Visualización interactiva combinada de índices de agua. Utiliza los botones del mapa para
+                            alternar entre NDWI y MNDWI.</p>
                     </div>
-                    <div class="map-container" style="height: 500px; padding: 0; overflow: hidden;">
-                        <iframe src="assets/p10/map_ndwi.html"
-                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
-                    </div>
-                </article>
-
-                <!-- MNDWI Map -->
-                <article class="card">
-                    <div class="card-header">
-                        <span class="card-tag">WebMap Avanzado</span>
-                        <h3>Índice MNDWI</h3>
-                        <p>Modified NDWI. Mejora la supresión de ruido de áreas edificadas.</p>
-                    </div>
-                    <div class="map-container" style="height: 500px; padding: 0; overflow: hidden;">
-                        <iframe src="assets/p10/map_mndwi.html"
+                    <div class="map-container" style="height: 600px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/P10/map_combined.html"
                             style="width: 100%; height: 100%; border: none; display: block;"></iframe>
                     </div>
                 </article>
@@ -263,12 +251,12 @@
                     <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="media-box" style="border:none; background:transparent; height: auto;">
                             <h4 style="margin-bottom: 1rem; color: var(--primary-accent);">Landsat</h4>
-                            <img src="assets/p10/10Bueno/LandsatGIF.gif" alt="Evolución Landsat"
+                            <img src="assets/P10/10Bueno/LandsatGIF.gif" alt="Evolución Landsat"
                                 style="width:100%; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         </div>
                         <div class="media-box" style="border:none; background:transparent; height: auto;">
                             <h4 style="margin-bottom: 1rem; color: var(--primary-accent);">Sentinel-2</h4>
-                            <img src="assets/p10/10Bueno/Sentinel-2Gif.gif" alt="Evolución Sentinel-2"
+                            <img src="assets/P10/10Bueno/Sentinel-2Gif.gif" alt="Evolución Sentinel-2"
                                 style="width:100%; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         </div>
                     </div>
