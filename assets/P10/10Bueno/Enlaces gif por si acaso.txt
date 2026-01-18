@@ -1,0 +1,8 @@
+Landsat
+
+https://earthengine.googleapis.com/v1/projects/211308167436/videoThumbnails/df7631ea3bd96057207643b3feb5dfa7-83f695269e2bed9a051b8e3990a3ca61:getPixels
+
+
+Sentinel
+
+https://earthengine.googleapis.com/v1/projects/211308167436/videoThumbnails/f92b558c205391d4e0d3f2da06d51634-3e99cf97f1f458410e360f2a0415fc6b:getPixels

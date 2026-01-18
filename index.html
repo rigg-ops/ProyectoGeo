@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portafolio WebMap | TIG</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,18 +138,33 @@
         </section>
 
         <!-- Práctica 7 -->
+        <!-- Práctica 7 -->
         <section id="practica7">
             <h2>Práctica 7: Resultados y Rendimiento</h2>
             <div class="grid">
-                <article class="card">
+                <!-- Table Results -->
+                <article class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-tag">Análisis</span>
                         <h3>Tabla de Resultados</h3>
-                        <p>Comparativa de rendimiento y datos obtenidos.</p>
+                        <p>Datos detallados del rendimiento.</p>
                     </div>
-                    <div class="placeholder-container media-box" id="p7-img">
-                        <span>TABLA/GRÁFICO (JPG/HTML)</span>
-                        <small>assets/practica7.jpg</small>
+                    <div class="media-box" style="padding:0; overflow: hidden; height: 500px;">
+                        <iframe src="assets/prac7/tabla_resultados.html"
+                            style="width: 100%; height: 100%; border: none; background: white;"></iframe>
+                    </div>
+                </article>
+
+                <!-- Performance Image -->
+                <article class="card">
+                    <div class="card-header">
+                        <span class="card-tag">Gráfico</span>
+                        <h3>Rendimiento</h3>
+                        <p>Gráfico de rendimientos.</p>
+                    </div>
+                    <div class="media-box" style="border:none; background:transparent;">
+                        <img src="assets/prac7/rendimientos.jpg" alt="Gráfico de Rendimientos"
+                            style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                     </div>
                 </article>
             </div>
@@ -189,39 +206,71 @@
         <section id="practica9">
             <h2>Práctica 9: Índices de Vegetación</h2>
             <div class="grid">
+                <!-- Unified SAVI & EVI Map -->
                 <article class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
-                        <span class="card-tag">WebMap</span>
-                        <h3>SAVI y EVI</h3>
-                        <p>Cálculo y visualización de índices de vegetación ajustados al suelo.</p>
+                        <span class="card-tag">WebMap Interactivo</span>
+                        <h3>Análisis de Vegetación (SAVI & EVI)</h3>
+                        <p>Visualización interactiva de índices SAVI y EVI. Utiliza el selector de capas para alternar.
+                        </p>
                     </div>
-                    <div id="map-p9" class="placeholder-container map-container"></div>
+                    <div class="map-container" style="height: 600px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/p9/map.html"
+                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                    </div>
                 </article>
             </div>
         </section>
 
         <!-- Práctica 10 -->
         <section id="practica10">
-            <h2>Práctica 10: Evolución Temporal</h2>
+            <h2>Práctica 10: Evolución Temporal e Índices Finales</h2>
             <div class="grid">
+                <!-- NDWI / MNDWI Map -->
+                <!-- NDWI Map -->
                 <article class="card">
                     <div class="card-header">
-                        <span class="card-tag">WebMap</span>
-                        <h3>Índice Calculado</h3>
-                        <p>Visualización del índice final exportado.</p>
+                        <span class="card-tag">WebMap Avanzado</span>
+                        <h3>Índice NDWI</h3>
+                        <p>Normalized Difference Water Index. Detección de cuerpos de agua superficiales.</p>
                     </div>
-                    <div id="map-p10" class="placeholder-container map-container"></div>
+                    <div class="map-container" style="height: 500px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/p10/map.html?layer=NDWI"
+                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                    </div>
                 </article>
 
+                <!-- MNDWI Map -->
                 <article class="card">
                     <div class="card-header">
-                        <span class="card-tag">Voluntario</span>
-                        <h3>Animación Temporal</h3>
-                        <p>Video/GIF de la evolución de los índices.</p>
+                        <span class="card-tag">WebMap Avanzado</span>
+                        <h3>Índice MNDWI</h3>
+                        <p>Modified NDWI. Mejora la supresión de ruido de áreas edificadas.</p>
                     </div>
-                    <div class="placeholder-container media-box">
-                        <span>GIF ANIMADO</span>
-                        <small>assets/video.gif</small>
+                    <div class="map-container" style="height: 500px; padding: 0; overflow: hidden;">
+                        <iframe src="assets/p10/map.html?layer=MNDWI"
+                            style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                    </div>
+                </article>
+
+                <!-- Temporal Animation -->
+                <article class="card" style="grid-column: 1 / -1; margin-top: 2rem;">
+                    <div class="card-header">
+                        <span class="card-tag">Animación Temporal</span>
+                        <h3>Evolución Temporal (GIFs)</h3>
+                        <p>Visualización de la evolución mediante series temporales Landsat y Sentinel-2.</p>
+                    </div>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="media-box" style="border:none; background:transparent; height: auto;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary-accent);">Landsat</h4>
+                            <img src="assets/p10/10Bueno/LandsatGIF.gif" alt="Evolución Landsat"
+                                style="width:100%; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        </div>
+                        <div class="media-box" style="border:none; background:transparent; height: auto;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary-accent);">Sentinel-2</h4>
+                            <img src="assets/p10/10Bueno/Sentinel-2Gif.gif" alt="Evolución Sentinel-2"
+                                style="width:100%; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        </div>
                     </div>
                 </article>
             </div>
@@ -277,8 +326,13 @@
     <script src="assets/zonas_validas_data.js"></script>
     <script src="assets/severidad_data.js"></script>
 
+    <script src="assets/p9_data.js"></script>
+
     <!-- Main Script -->
-    <script src="script.js"></script>
+    <script src="script.js?v=6"></script>
+
+
+
 </body>
 
 </html>

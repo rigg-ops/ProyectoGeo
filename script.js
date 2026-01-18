@@ -134,6 +134,67 @@ document.addEventListener('DOMContentLoaded', () => {
     // Practice 9: SAVI & EVI
     const mapP9 = initMap('map-p9', valenciaCoords, 11);
 
+    // Helper to load TIF from Base64
+    async function loadTifLayer(base64Data, map) {
+        if (!base64Data) return null;
+        try {
+            const binaryString = window.atob(base64Data);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const arrayBuffer = bytes.buffer;
+            const georaster = await parseGeoraster(arrayBuffer);
+
+            const layer = new GeoRasterLayer({
+                georaster: georaster,
+                opacity: 0.7,
+                resolution: 256,
+                pixelValuesToColorFn: values => {
+                    const val = values[0];
+                    if (val === -9999 || isNaN(val)) return null;
+
+                    // Vegetation Index Scale (approx -1 to 1, usually 0 to 1 for meaningful veg)
+                    if (val < 0.1) return '#8B4513'; // Soil/Barren (Brown)
+                    if (val < 0.2) return '#CD853F'; // Light Soil
+                    if (val < 0.3) return '#F4A460'; // Sandy
+                    if (val < 0.4) return '#FFFF00'; // Low Veg (Yellow)
+                    if (val < 0.5) return '#ADFF2F'; // Moderate (GreenYellow)
+                    if (val < 0.6) return '#32CD32'; // Healthy (LimeGreen)
+                    if (val < 0.7) return '#008000'; // Dense (Green)
+                    return '#006400'; // Very Dense (DarkGreen)
+                }
+            });
+            return layer;
+        } catch (e) {
+            console.error("Error loading TIF:", e);
+            return null;
+        }
+    }
+
+    if (typeof saviData !== 'undefined' && typeof eviData !== 'undefined') {
+        Promise.all([
+            loadTifLayer(saviData, mapP9),
+            loadTifLayer(eviData, mapP9)
+        ]).then(([saviLayer, eviLayer]) => {
+            if (saviLayer && eviLayer && mapP9) {
+                // Add SAVI by default
+                saviLayer.addTo(mapP9);
+                mapP9.fitBounds(saviLayer.getBounds());
+
+                // Controls
+                const overlays = {
+                    "SAVI (Vegetación Ajustado)": saviLayer,
+                    "EVI (Vegetación Mejorado)": eviLayer
+                };
+                L.control.layers(null, overlays, { collapsed: false }).addTo(mapP9);
+            }
+        });
+    } else {
+        console.warn("P9 Data not found.");
+    }
+
     // Practice 10: Indices
     const mapP10 = initMap('map-p10', valenciaCoords, 11);
 
