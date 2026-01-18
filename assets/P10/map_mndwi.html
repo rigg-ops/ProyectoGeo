@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Mapa MNDWI</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Optional: Loading indicator */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading" class="loading">Cargando datos MNDWI...</div>
+    <div id="map"></div>
+    <script src="../p10_data.js"></script>
+    <script>
+        const map = L.map('map').setView([39.4699, -0.3763], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // No layer control needed for single layer
+
+        function decodeBase64(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function computeStats(georaster) {
+            let min = Infinity;
+            let max = -Infinity;
+            const values = georaster.values[0];
+            const noData = georaster.noDataValue;
+
+            for (let i = 0; i < values.length; i++) {
+                for (let j = 0; j < values[i].length; j++) {
+                    const val = values[i][j];
+                    if (val !== noData && !isNaN(val) && val !== -9999) {
+                        if (val < min) min = val;
+                        if (val > max) max = val;
+                    }
+                }
+            }
+            return { min, max };
+        }
+
+        function createLayer(georaster, name, colorScaleFn) {
+            let min = georaster.mins[0];
+            let max = georaster.maxs[0];
+
+            if (min === undefined || max === undefined) {
+                console.warn(`${name}: Stats missing, calculating...`);
+                // Use a small sample or full stats? Full stats is safer for accuracy but slow
+                // Since user already waited for load, we compute full stats
+                const stats = computeStats(georaster);
+                min = stats.min;
+                max = stats.max;
+                georaster.mins[0] = min;
+                georaster.maxs[0] = max;
+                console.log(`${name} stats calculated:`, min, max);
+            } else {
+                console.log(`${name} stats found:`, min, max);
+            }
+
+            const layer = new GeoRasterLayer({
+                georaster: georaster,
+                opacity: 0.8,
+                resolution: 256, // Improved resolution
+                workers: false, // Disable web workers to fix 'file://' protocol issues
+                pixelValuesToColorFn: values => {
+                    const val = values[0];
+                    if (val === null || isNaN(val) || val === -9999) return null;
+                    return colorScaleFn(val, min, max);
+                }
+            });
+            return layer;
+        }
+
+        // Color scale for Water Indices (NDWI/MNDWI)
+        // High values = Water (Blue), Low values = Non-water (Brown/Green)
+        const waterColorFn = (val, min, max) => {
+            // Clamping range if outlier exists
+            // Usually indices are -1 to 1
+            const norm = (val - min) / (max - min);
+
+            if (norm < 0.2) return '#d73027'; // Non-water
+            if (norm < 0.4) return '#fc8d59';
+            if (norm < 0.6) return '#fee08b';
+            if (norm < 0.8) return '#91bfdb';
+            return '#4575b4'; // Water
+        };
+
+        async function init() {
+            // Hardcoded for MNDWI
+
+            try {
+                // LOAD MNDWI
+                if (typeof mndwiData !== 'undefined') {
+                    const georaster = await parseGeoraster(decodeBase64(mndwiData));
+                    const layer = createLayer(georaster, 'MNDWI', waterColorFn);
+
+                    // Exclusive mode
+                    layer.addTo(map);
+                    map.fitBounds(layer.getBounds());
+                } else {
+                    throw new Error("Datos MNDWI no encontrados en p10_data.js");
+                }
+            } catch (err) {
+                console.error("Error loading layers:", err);
+                alert("Error cargando mapa MNDWI: " + err.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        init();
+
+    </script>
+</body>
+
+</html>
