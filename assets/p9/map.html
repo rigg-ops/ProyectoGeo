@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Práctica 9 - SAVI & EVI</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+
+    <style>
+        html,
+        body,
+        #map {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <script src="../p9_data.js"></script>
+    <script>
+        const map = L.map('map').setView([38.9, -0.28], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        async function loadTif(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+
+            const georaster = await parseGeoraster(bytes.buffer);
+
+            return new GeoRasterLayer({
+                georaster,
+                opacity: 0.85,
+                resolution: 256,                
+                resampleMethod: "bilinear"      
+            });
+        }
+        Promise.all([
+            loadTif(saviData),
+            loadTif(eviData)
+        ]).then(([saviLayer, eviLayer]) => {
+
+            saviLayer.addTo(map);
+            map.fitBounds(saviLayer.getBounds());
+
+            L.control.layers(null, {
+                "Índice SAVI": saviLayer,
+                "Índice EVI": eviLayer
+            }).addTo(map);
+        });
+    </script>
+
+</body>
+
+</html>
